@@ -1,4 +1,7 @@
+import itertools
+
 import numpy as np
+
 
 _PAD = ' ' 
 _TOP_LEFT_CORNER = '┌'
@@ -95,33 +98,47 @@ def _normalize_cell_width(M, min_column_width=0):
     split = np.concatenate([_character_cell(c) for c in M[0,0]], axis=1)
     right_padding_size = max(0, min_column_width - split.shape[1])
     right_padding = _character_row(_PAD, right_padding_size)
-    y = np.concatenate((split, right_padding), axis=1)
-    return y
+    return np.concatenate((split, right_padding), axis=1)
     
 
 def _normalize_column_width(M, min_column_width=0):
     # M is a column vector
-    y = np.concatenate([_normalize_cell_width(M[i:i+1, :], min_column_width) for i
-                           in range(0, M.shape[0])], axis=0)
-    return y
+    return np.concatenate([_normalize_cell_width(M[i:i+1, :], min_column_width)
+                           for i in range(0, M.shape[0])], axis=0)
+
 
 def _normalize_all_cells(M):
     if M.shape == (0, 0):
         # Bit of a hack because we can't apply vectorized operations to 0x0
         # matrices.
-        return M
+        return M, np.full((0,0), 0)
 
     max_column_widths = np.max(np.vectorize(len)(M), axis=0)
 
     if M.shape[1] == 1:
-        return _normalize_column_width(M, max_column_widths[0])
+        return _normalize_column_width(M, max_column_widths[0]), max_column_widths
 
     columns = np.split(M, M.shape[1], axis=1)
-    max_column_widths = np.max(np.vectorize(len)(M), axis=0)
     zipped = zip(columns, max_column_widths)
 
     return np.concatenate([_normalize_column_width(col, w) for col, w in zipped],
-                          axis=0)
+                          axis=1), max_column_widths
+
+
+def _space_columns(M, column_widths):
+    if len(column_widths) == 1:
+        return M
+
+    num_rows, _ = M.shape
+
+    indices = np.cumsum(column_widths)[:-1]
+    columns = np.split(M, indices, axis=1)
+    spacers = [_character_column(_PAD, num_rows)] * (len(columns) - 1)
+
+    columns_with_spacers = [col for cols in itertools.zip_longest(columns, spacers)
+                            for col in cols if col is not None]
+
+    return np.concatenate(columns_with_spacers, axis=1)
 
 
 def _cells_to_string(M):
@@ -146,7 +163,7 @@ def matrix_to_string(M, name=None, include_dimensions=False):
           M_x
 
     """
-    return _render(_border(_pad(_normalize_all_cells(_cells_to_string(M)))))
+    return _render(_border(_pad(_space_columns(*_normalize_all_cells(_cells_to_string(M))))))
 
 
 #    name = name or ''
