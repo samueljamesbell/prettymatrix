@@ -91,6 +91,43 @@ def _pad(M):
     return _pad_vertically(_pad_horizontally(M))
 
 
+def _normalize_cell_width(M, min_column_width=0):
+    split = np.concatenate([_character_cell(c) for c in M[0,0]], axis=1)
+    right_padding_size = max(0, min_column_width - split.shape[1])
+    right_padding = _character_row(_PAD, right_padding_size)
+    y = np.concatenate((split, right_padding), axis=1)
+    return y
+    
+
+def _normalize_column_width(M, min_column_width=0):
+    # M is a column vector
+    y = np.concatenate([_normalize_cell_width(M[i:i+1, :], min_column_width) for i
+                           in range(0, M.shape[0])], axis=0)
+    return y
+
+def _normalize_all_cells(M):
+    if M.shape == (0, 0):
+        # Bit of a hack because we can't apply vectorized operations to 0x0
+        # matrices.
+        return M
+
+    max_column_widths = np.max(np.vectorize(len)(M), axis=0)
+
+    if M.shape[1] == 1:
+        return _normalize_column_width(M, max_column_widths[0])
+
+    columns = np.split(M, M.shape[1], axis=1)
+    max_column_widths = np.max(np.vectorize(len)(M), axis=0)
+    zipped = zip(columns, max_column_widths)
+
+    return np.concatenate([_normalize_column_width(col, w) for col, w in zipped],
+                          axis=0)
+
+
+def _cells_to_string(M):
+    return M.astype(str)
+
+
 def _render(M):
     return '\n'.join((''.join(row) for row in M))
 
@@ -109,7 +146,7 @@ def matrix_to_string(M, name=None, include_dimensions=False):
           M_x
 
     """
-    return _render(_border(_pad(M)))
+    return _render(_border(_pad(_normalize_all_cells(_cells_to_string(M)))))
 
 
 #    name = name or ''
