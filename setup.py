@@ -1,9 +1,9 @@
 from distutils.core import setup
 
 setup(
-    name='pretty-matrix',
+    name='prettymatrix',
     version='0.0.0',
-    packages=['pretty-matrix',],
+    packages=['prettymatrix',],
     license='LICENSE',
     author='Samuel Bell',
     author_email='samueljamesbell@gmail.com',
