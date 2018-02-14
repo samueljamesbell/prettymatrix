@@ -24,7 +24,7 @@ def _left_border(M):
     num_rows, num_cols = M.shape
 
     top_left_corner = _character_cell(_TOP_LEFT_CORNER)
-    border = _character_column(_BORDER, num_rows)
+    border = _character_column(_BORDER, num_rows - 2)
     bottom_left_corner = _character_cell(_BOTTOM_LEFT_CORNER)
 
     left_border = np.concatenate(
@@ -40,7 +40,7 @@ def _right_border(M):
     num_rows, num_cols = M.shape
 
     top_right_corner = _character_cell(_TOP_RIGHT_CORNER)
-    border = _character_column(_BORDER, num_rows)
+    border = _character_column(_BORDER, num_rows - 2)
     bottom_right_corner = _character_cell(_BOTTOM_RIGHT_CORNER)
 
     right_border = np.concatenate(
@@ -50,6 +50,15 @@ def _right_border(M):
         axis=0)
 
     return right_border
+
+
+def _border(M):
+    left_border = _left_border(M)
+    right_border = _right_border(M)
+
+    bordered = np.concatenate((left_border, M, right_border), axis=1)
+
+    return bordered
 
 
 def _pad_vertically(M):
@@ -78,6 +87,8 @@ def _pad_horizontally(M):
     return padded
 
 
+def _pad(M):
+    return _pad_vertically(_pad_horizontally(M))
 
 
 def _render(M):
@@ -98,11 +109,7 @@ def matrix_to_string(M, name=None, include_dimensions=False):
           M_x
 
     """
-    left_border = _left_border(M)
-    right_border = _right_border(M)
-    padded = _pad_horizontally(_pad_vertically(M))
-    bordered = np.concatenate((left_border, padded, right_border), axis=1)
-    return _render(bordered)
+    return _render(_border(_pad(M)))
 
 
 #    name = name or ''
