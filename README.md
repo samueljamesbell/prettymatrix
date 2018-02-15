@@ -1,4 +1,5 @@
-# prettymatrix
+prettymatrix
+============
 
 Struggling to tell your rows from your columns?
 
@@ -6,7 +7,7 @@ Struggling to tell your rows from your columns?
 to.
 
 Installation
-============
+------------
 Available through pip:
 
 ```
@@ -14,7 +15,7 @@ pip install prettymatrix
 ```
 
 Examples
-========
+--------
 ```
 import prettyprint
 
