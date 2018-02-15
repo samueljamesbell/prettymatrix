@@ -15,8 +15,8 @@ def _character_cell(c):
     return np.full((1,1), c)
 
 
-def _character_column(c, height):
-     return np.full((height, 1), c)
+def _character_column(c, height, width=1):
+     return np.full((height, width), c)
 
 
 def _character_row(c, width):
@@ -64,15 +64,15 @@ def _border(M):
     return bordered
 
 
-def _pad_vertically(M):
+def _pad_vertically(M, left_padding=1, right_padding=1):
     num_rows, num_cols = M.shape
-    pad_column = _character_column(_PAD, num_rows)
+    left_padding = _character_column(_PAD, num_rows, left_padding)
+    right_padding = _character_column(_PAD, num_rows, right_padding)
 
     padded = np.concatenate(
-        (pad_column,
-         M,
-         pad_column),
-        axis=1)
+         (left_padding,
+          M,
+          right_padding), axis=1)
 
     return padded
 
@@ -151,7 +151,9 @@ def _append_name(M, name):
 
     num_rows, num_cols = M.shape
     name_row = _normalize_cell_width(np.array([[name]]), num_cols)
-    return np.concatenate((M, name_row), axis=0)
+    right_padding = name_row.shape[1] - num_cols
+    padded = _pad_vertically(M, 0, right_padding)
+    return np.concatenate((padded, name_row), axis=0)
 
 
 def _render(M):
