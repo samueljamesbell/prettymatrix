@@ -225,6 +225,66 @@ class PrettyMatrixTest(unittest.TestCase):
                                                name='W_long_name')
         self.assertEqual(expected, actual)
 
+    def test_empty_matrix_with_dimensions(self):
+        expected = (
+            "┌  ┐ \n"
+            "└  ┘ \n"
+            "(0x0)"
+        )
+        actual = prettymatrix.matrix_to_string(np.full((0, 0), ''),
+                                               include_dimensions=True)
+        self.assertEqual(expected, actual)
+
+    def test_1_x_1_matrix_with_dimensions(self):
+        expected = (
+            "┌   ┐\n"
+            "│ 0 │\n"
+            "└   ┘\n"
+            "(1x1)"
+        )
+        actual = prettymatrix.matrix_to_string(np.full((1, 1), '0'),
+                                               include_dimensions=True)
+        self.assertEqual(expected, actual)
+
+    def test_1_x_2_matrix_with_dimensions(self):
+        expected = (
+            "┌     ┐\n"
+            "│ 0 0 │\n"
+            "└     ┘\n"
+            "(1x2)  "
+        )
+        actual = prettymatrix.matrix_to_string(np.full((1, 2), '0'),
+                                               include_dimensions=True)
+        self.assertEqual(expected, actual)
+
+    def test_2_x_1_matrix_with_dimensions(self):
+        expected = (
+            "┌   ┐\n"
+            "│ 0 │\n"
+            "│ 0 │\n"
+            "└   ┘\n"
+            "(2x1)"
+        )
+        actual = prettymatrix.matrix_to_string(np.full((2, 1), '0'),
+                                               include_dimensions=True)
+        self.assertEqual(expected, actual)
+
+    def test_empty_matrix_with_name_and_dimensions(self):
+        expected = (
+            "┌  ┐ \n"
+            "└  ┘ \n"
+            "M    \n"
+            "(0x0)"
+        )
+        actual = prettymatrix.matrix_to_string(np.full((0, 0), ''),
+                                               name='M',
+                                               include_dimensions=True)
+        self.assertEqual(expected, actual)
+
+
+
+
+
 
 if __name__ == "__main__":
     unittest.main()
