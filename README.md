@@ -1,6 +1,8 @@
 prettymatrix
 ============
 
+[![Build Status](https://travis-ci.org/samueljamesbell/prettymatrix.svg?branch=master)](https://travis-ci.org/samueljamesbell/prettymatrix)
+
 Struggling to tell your rows from your columns?
 
 `prettymatrix` pretty prints your matrices and vectors, just like you're used
