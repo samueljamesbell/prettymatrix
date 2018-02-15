@@ -23,7 +23,7 @@ M = np.array([['1', '22'], ['333', '4444']])
 
 print(prettyprint.matrix_to_string(M))
 
-#  =>
+# =>
 #  ┌          ┐
 #  │ 1   22   │
 #  │ 333 4444 │
