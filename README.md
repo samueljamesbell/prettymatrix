@@ -19,11 +19,11 @@ pip install prettymatrix
 Examples
 --------
 ```
-import prettyprint
+import prettymatrix
 
 M = np.array([['1', '22'], ['333', '4444']])
 
-print(prettyprint.matrix_to_string(M))
+print(prettymatrix.matrix_to_string(M))
 
 # =>
 #  ┌          ┐
@@ -36,11 +36,11 @@ print(prettyprint.matrix_to_string(M))
 Annotate your matrix with a name:
 
 ```
-import prettyprint
+import prettymatrix
 
 M = np.array([['0'], ['0']])
 
-print(prettyprint.matrix_to_string(M, name='M_x_y'))
+print(prettymatrix.matrix_to_string(M, name='M_x_y'))
 
 # =>
 #  ┌   ┐
@@ -54,11 +54,11 @@ print(prettyprint.matrix_to_string(M, name='M_x_y'))
 Or its dimensions:
 
 ```
-import prettyprint
+import prettymatrix
 
 M = np.array([['0'], ['0']])
 
-print(prettyprint.matrix_to_string(M, include_dimensions=True))
+print(prettymatrix.matrix_to_string(M, include_dimensions=True))
 
 # =>
 #  ┌   ┐
