@@ -145,6 +145,15 @@ def _cells_to_string(M):
     return M.astype(str)
 
 
+def _append_name(M, name):
+    if not name:
+        return M
+
+    num_rows, num_cols = M.shape
+    name_row = _normalize_cell_width(np.array([[name]]), num_cols)
+    return np.concatenate((M, name_row), axis=0)
+
+
 def _render(M):
     return '\n'.join((''.join(row) for row in M))
 
@@ -163,7 +172,14 @@ def matrix_to_string(M, name=None, include_dimensions=False):
           M_x
 
     """
-    return _render(_border(_pad(_space_columns(*_normalize_all_cells(_cells_to_string(M))))))
+    return _render(
+            _append_name(
+                _border(
+                    _pad(
+                        _space_columns(
+                            *_normalize_all_cells(
+                                _cells_to_string(M))))),
+            name))
 
 
 #    name = name or ''

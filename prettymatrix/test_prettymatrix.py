@@ -141,6 +141,16 @@ class PrettyMatrixTest(unittest.TestCase):
         actual = prettymatrix.matrix_to_string(np.array([['00', '000'], ['0', '00']]))
         self.assertEqual(expected, actual)
 
+    def test_empty_matrix_with_short_name(self):
+        expected = (
+            "┌  ┐\n"
+            "└  ┘\n"
+            "W   "
+        )
+        actual = prettymatrix.matrix_to_string(np.full((0, 0), ''), name='W')
+        self.assertEqual(expected, actual)
+
+
 
 if __name__ == "__main__":
     unittest.main()
