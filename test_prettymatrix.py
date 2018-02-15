@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from prettymatrix import prettymatrix
+import prettymatrix
 
 
 class PrettyMatrixTest(unittest.TestCase):
