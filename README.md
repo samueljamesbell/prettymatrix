@@ -5,7 +5,7 @@ prettymatrix
 
 Struggling to tell your rows from your columns?
 
-`prettymatrix` pretty prints your matrices and vectors, just like you're used
+`prettymatrix` creates human-friendly string representations of your numpy matrices and vectors, just like you're used
 to.
 
 Installation
@@ -18,7 +18,9 @@ pip install prettymatrix
 
 Examples
 --------
+### Stringify a single matrix
 ```
+import numpy as np
 import prettymatrix
 
 M = np.array([['1', '22'], ['333', '4444']])
@@ -36,6 +38,7 @@ print(prettymatrix.matrix_to_string(M))
 Annotate your matrix with a name:
 
 ```
+import numpy as np
 import prettymatrix
 
 M = np.array([['0'], ['0']])
@@ -54,6 +57,7 @@ print(prettymatrix.matrix_to_string(M, name='M_x_y'))
 Or its dimensions:
 
 ```
+import numpy as np
 import prettymatrix
 
 M = np.array([['0'], ['0']])
@@ -66,5 +70,22 @@ print(prettymatrix.matrix_to_string(M, include_dimensions=True))
 #  │ 0 │
 #  └   ┘
 #  (2x1)
+#
+```
+
+### Stringify a multiple matrices in a row
+```
+import numpy as np
+import prettymatrix
+
+M = np.array([['1', '22'], ['333', '4444']])
+
+print(prettymatrix.matrices_to_string(M, M))
+
+# =>
+#  ┌          ┐ ┌          ┐
+#  │ 1   22   │ │ 1   22   │
+#  │ 333 4444 │ │ 333 4444 │
+#  └          ┘ └          ┘
 #
 ```

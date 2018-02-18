@@ -12,7 +12,31 @@ _BORDER = '│'
 
 
 def matrix_to_string(M, name=None, include_dimensions=False):
-    """Print a 2D matrix, M."""
+    """Stringify a 2D matrix, M."""
+    return _render(_format_matrix(M, name, include_dimensions))
+
+
+def matrices_to_string(*seq):
+    """Stringify a sequence of 2D matrices."""
+    formatted = [_format_matrix(M) for M in seq]
+    num_rows = max(M.shape[0] for M in formatted)
+    desired_padding = num_rows - M.shape[0]
+    padded = [_pad_horizontally(M, top_padding=0, bottom_padding=desired_padding) for M in formatted]
+    widths = [M.shape[1] for M in padded]
+    return _render(_space_columns(np.concatenate(padded, axis=1), widths)) 
+
+
+def _format_matrix(M, name=None, include_dimensions=False):
+    """Return a copy of M with all formatting steps applied.
+
+    This includes:
+    * Split the contents of every cell to contain at most one character
+    * Add a column of padding between every two columns
+    * Wrap the entire matrix in padding
+    * Add typical matrix-notation bracketing
+    * Optionally append a name row to the matrix
+    * Optionally append a row containing the matrix's dimensions
+    """
     N = _append_string_row(
             _border(
             _pad(
@@ -23,7 +47,7 @@ def matrix_to_string(M, name=None, include_dimensions=False):
     if include_dimensions:
         N = _append_string_row(N, '({}x{})'.format(*M.shape))
 
-    return _render(N)
+    return N
 
 
 def _character_cell(c):
@@ -36,9 +60,9 @@ def _character_column(c, height, width=1):
     return np.full((height, width), c)
 
 
-def _character_row(c, width):
+def _character_row(c, width, height=1):
     """Return a row of fixed width filled with character c."""
-    return np.full((1, width), c)
+    return np.full((height, width), c)
 
 
 def _left_border(M):
@@ -86,28 +110,30 @@ def _border(M):
 
 
 def _pad_vertically(M, left_padding=1, right_padding=1):
-    """Return a copy of M wrapped on the top and bottom by columns of padding."""
+    """Return a copy of M wrapped on each side by columns of padding."""
     num_rows, num_cols = M.shape
-    left_padding = _character_column(_PAD, num_rows, left_padding)
-    right_padding = _character_column(_PAD, num_rows, right_padding)
+    left_pad = _character_column(_PAD, num_rows, left_padding)
+    right_pad = _character_column(_PAD, num_rows, right_padding)
 
     padded = np.concatenate(
-         (left_padding,
+         (left_pad,
           M,
-          right_padding), axis=1)
+          right_pad), axis=1)
 
     return padded
 
 
-def _pad_horizontally(M):
-    """Return a copy of M wrapped on each side by a single column of padding."""
+def _pad_horizontally(M, top_padding=1, bottom_padding=1):
+    """Return a copy of M wrapped on the top and bottom by a single row of padding."""
     num_rows, num_cols = M.shape
-    pad_row = _character_row(_PAD, num_cols)
+
+    top_pad = _character_row(_PAD, num_cols, top_padding)
+    bottom_pad = _character_row(_PAD, num_cols, bottom_padding)
 
     padded = np.concatenate(
-        (pad_row,
+        (top_pad,
          M,
-         pad_row),
+         bottom_pad),
         axis=0)
 
     return padded

@@ -5,7 +5,7 @@ import numpy as np
 import prettymatrix
 
 
-class PrettyMatrixTest(unittest.TestCase):
+class MatrixToStringTest(unittest.TestCase):
 
     def test_empty_matrix(self):
         expected = (
@@ -280,6 +280,56 @@ class PrettyMatrixTest(unittest.TestCase):
                                                name='M',
                                                include_dimensions=True)
         self.assertEqual(expected, actual)
+
+
+class ExpressionToString(unittest.TestCase):
+
+    def test_two_empty_matrices(self):
+        expected = (
+            "┌  ┐ ┌  ┐\n"
+            "└  ┘ └  ┘"
+        )
+        actual = prettymatrix.matrices_to_string(np.full((0, 0), ''), np.full((0, 0), ''))
+        self.assertEqual(expected, actual)
+
+    def test_two_1x1_matrices(self):
+        expected = (
+            "┌   ┐ ┌   ┐\n"
+            "│ 0 │ │ 0 │\n"
+            "└   ┘ └   ┘"
+        )
+        actual = prettymatrix.matrices_to_string(np.full((1, 1), '0'), np.full((1, 1), '0'))
+        self.assertEqual(expected, actual)
+
+    def test_different_width_matrices(self):
+        expected = (
+            "┌   ┐ ┌     ┐\n"
+            "│ 0 │ │ 0 0 │\n"
+            "└   ┘ └     ┘"
+        )
+        actual = prettymatrix.matrices_to_string(np.full((1, 1), '0'), np.full((1, 2), '0'))
+        self.assertEqual(expected, actual)
+
+    def test_different_height_matrices(self):
+        expected = (
+            "┌   ┐ ┌   ┐\n"
+            "│ 0 │ │ 0 │\n"
+            "└   ┘ │ 0 │\n"
+            "      └   ┘"
+        )
+        actual = prettymatrix.matrices_to_string(np.full((1, 1), '0'), np.full((2, 1), '0'))
+        self.assertEqual(expected, actual)
+
+    def test_different_height_matrices_mirror(self):
+        expected = (
+            "┌   ┐ ┌   ┐\n"
+            "│ 0 │ │ 0 │\n"
+            "│ 0 │ └   ┘\n"
+            "└   ┘      "
+        )
+        actual = prettymatrix.matrices_to_string(np.full((2, 1), '0'), np.full((1, 1), '0'))
+        self.assertEqual(expected, actual)
+
 
 
 if __name__ == "__main__":
