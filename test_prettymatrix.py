@@ -299,6 +299,93 @@ class MatrixToStringTest(unittest.TestCase):
         actual = prettymatrix.matrix_to_string(np.full((10,1), '0'))
         self.assertEqual(expected, actual)
 
+    def test_11x1_matrix_inserts_ellipses(self):
+        expected = (
+            "┌   ┐\n"
+            "│ 0 │\n"
+            "│ 0 │\n"
+            "│ 0 │\n"
+            "│ … │\n"
+            "│ … │\n"
+            "│ … │\n"
+            "│ 0 │\n"
+            "│ 0 │\n"
+            "│ 0 │\n"
+            "└   ┘"
+        )
+        actual = prettymatrix.matrix_to_string(np.full((11,1), '0'))
+        self.assertEqual(expected, actual)
+
+    def test_11x2_matrix_inserts_ellipses(self):
+        expected = (
+            "┌     ┐\n"
+            "│ 0 0 │\n"
+            "│ 0 0 │\n"
+            "│ 0 0 │\n"
+            "│ … … │\n"
+            "│ … … │\n"
+            "│ … … │\n"
+            "│ 0 0 │\n"
+            "│ 0 0 │\n"
+            "│ 0 0 │\n"
+            "└     ┘"
+        )
+        actual = prettymatrix.matrix_to_string(np.full((11,2), '0'))
+        self.assertEqual(expected, actual)
+
+    def test_1x10_matrix_renders_normally(self):
+        expected = (
+            "┌                     ┐\n"
+            "│ 0 0 0 0 0 0 0 0 0 0 │\n"
+            "└                     ┘"
+        )
+        actual = prettymatrix.matrix_to_string(np.full((1,10), '0'))
+        self.assertEqual(expected, actual)
+
+    def test_1x10_matrix_inserts_ellipses(self):
+        expected = (
+            "┌                   ┐\n"
+            "│ 0 0 0 … … … 0 0 0 │\n"
+            "└                   ┘"
+        )
+        actual = prettymatrix.matrix_to_string(np.full((1,11), '0'))
+        self.assertEqual(expected, actual)
+
+    def test_10x10_matrix_renders_normally(self):
+        expected = (
+            "┌                     ┐\n"
+            "│ 0 0 0 0 0 0 0 0 0 0 │\n"
+            "│ 0 0 0 0 0 0 0 0 0 0 │\n"
+            "│ 0 0 0 0 0 0 0 0 0 0 │\n"
+            "│ 0 0 0 0 0 0 0 0 0 0 │\n"
+            "│ 0 0 0 0 0 0 0 0 0 0 │\n"
+            "│ 0 0 0 0 0 0 0 0 0 0 │\n"
+            "│ 0 0 0 0 0 0 0 0 0 0 │\n"
+            "│ 0 0 0 0 0 0 0 0 0 0 │\n"
+            "│ 0 0 0 0 0 0 0 0 0 0 │\n"
+            "│ 0 0 0 0 0 0 0 0 0 0 │\n"
+            "└                     ┘"
+        )
+        actual = prettymatrix.matrix_to_string(np.full((10,10), '0'))
+        self.assertEqual(expected, actual)
+
+    def test_11x11_matrix_inserts_ellipses(self):
+        expected = (
+            "┌                   ┐\n"
+            "│ 0 0 0 … … … 0 0 0 │\n"
+            "│ 0 0 0 … … … 0 0 0 │\n"
+            "│ 0 0 0 … … … 0 0 0 │\n"
+            "│ … … … … … … … … … │\n"
+            "│ … … … … … … … … … │\n"
+            "│ … … … … … … … … … │\n"
+            "│ 0 0 0 … … … 0 0 0 │\n"
+            "│ 0 0 0 … … … 0 0 0 │\n"
+            "│ 0 0 0 … … … 0 0 0 │\n"
+            "└                   ┘"
+        )
+        actual = prettymatrix.matrix_to_string(np.full((11,11), '0'))
+        self.assertEqual(expected, actual)
+
 
 class MatricesToStringTest(unittest.TestCase):
 

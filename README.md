@@ -33,6 +33,25 @@ print(prettymatrix.matrix_to_string(M))
 #  │ 333 4444 │
 #  └          ┘
 #
+
+# We condense large matrices to a readable size
+N = prettymatrix.matrix_to_string(np.full((1000,1000), '0'))
+
+print(prettymatrix.matrix_to_string(N))
+
+# =>
+#  ┌                   ┐
+#  │ 0 0 0 … … … 0 0 0 │
+#  │ 0 0 0 … … … 0 0 0 │
+#  │ 0 0 0 … … … 0 0 0 │
+#  │ … … … … … … … … … │
+#  │ … … … … … … … … … │
+#  │ … … … … … … … … … │
+#  │ 0 0 0 … … … 0 0 0 │
+#  │ 0 0 0 … … … 0 0 0 │
+#  │ 0 0 0 … … … 0 0 0 │
+#  └                   ┘
+#
 ```
 
 Annotate your matrix with a name:

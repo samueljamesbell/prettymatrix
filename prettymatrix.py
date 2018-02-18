@@ -10,6 +10,11 @@ _BOTTOM_LEFT_CORNER = '└'
 _BOTTOM_RIGHT_CORNER = '┘'
 _BORDER = '│'
 
+_ELLIPSIS = '…'
+
+_MAX_HEIGHT = _MAX_WIDTH = 10
+_SHRUNK_NUM_ROWS = _SHRUNK_NUM_COLS = 3
+
 
 def matrix_to_string(M, name=None, include_dimensions=False):
     """Stringify a 2D matrix, M."""
@@ -33,6 +38,7 @@ def _format_matrix(M, name=None, include_dimensions=False):
     * Add a column of padding between every two columns
     * Wrap the entire matrix in padding
     * Add typical matrix-notation bracketing
+    * Replace internal rows and columns with ellipses if matrix is too large
     * Optionally append a name row to the matrix
     * Optionally append a row containing the matrix's dimensions
     """
@@ -41,7 +47,8 @@ def _format_matrix(M, name=None, include_dimensions=False):
             _pad(
             _space_columns(
             *_normalize_all_cells(
-            _cells_to_string(M))))), name)
+            _cells_to_string(
+            _cap_dimensions(M)))))), name)
 
     if include_dimensions:
         N = _append_string_row(N, '({}x{})'.format(*M.shape))
@@ -222,6 +229,49 @@ def _append_string_row(M, string):
     right_padding = string_row.shape[1] - num_cols
     padded = _pad_vertically(M, 0, right_padding)
     return np.concatenate((padded, string_row), axis=0)
+
+
+def _cap_dimensions(M):
+    """Return a copy of M bounded to a fixed size.
+
+    We keep a fixed number of the original columns and rows, but replace all
+    the internals with ellipses to indicate omission.
+    """
+    return _cap_width(_cap_height(M))
+
+
+def _cap_height(M):
+    """Return a copy of M bounded to a fixed number of rows."""
+    num_rows, num_cols = M.shape
+
+    if num_rows <= _MAX_HEIGHT:
+        return M
+
+    top_segment = M[:_SHRUNK_NUM_ROWS, :]
+    middle_segment = _character_row(_ELLIPSIS, num_cols, height=_SHRUNK_NUM_ROWS)
+    bottom_segment = M[-_SHRUNK_NUM_ROWS:, :]
+
+    return np.concatenate(
+            (top_segment,
+             middle_segment,
+             bottom_segment), axis=0)
+
+
+def _cap_width(M):
+    """Return a copy of M bounded to a fixed number of columns."""
+    num_rows, num_cols = M.shape
+
+    if num_cols <= _MAX_WIDTH:
+        return M
+
+    top_segment = M[:, :_SHRUNK_NUM_COLS]
+    middle_segment = _character_column(_ELLIPSIS, num_rows, width=_SHRUNK_NUM_COLS)
+    bottom_segment = M[:, -_SHRUNK_NUM_COLS:]
+
+    return np.concatenate(
+            (top_segment,
+             middle_segment,
+             bottom_segment), axis=1)
 
 
 def _render(M):
