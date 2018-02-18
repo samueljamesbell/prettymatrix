@@ -281,8 +281,26 @@ class MatrixToStringTest(unittest.TestCase):
                                                include_dimensions=True)
         self.assertEqual(expected, actual)
 
+    def test_10x1_matrix_renders_normally(self):
+        expected = (
+            "┌   ┐\n"
+            "│ 0 │\n"
+            "│ 0 │\n"
+            "│ 0 │\n"
+            "│ 0 │\n"
+            "│ 0 │\n"
+            "│ 0 │\n"
+            "│ 0 │\n"
+            "│ 0 │\n"
+            "│ 0 │\n"
+            "│ 0 │\n"
+            "└   ┘"
+        )
+        actual = prettymatrix.matrix_to_string(np.full((10,1), '0'))
+        self.assertEqual(expected, actual)
 
-class ExpressionToString(unittest.TestCase):
+
+class MatricesToStringTest(unittest.TestCase):
 
     def test_two_empty_matrices(self):
         expected = (

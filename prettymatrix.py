@@ -20,8 +20,7 @@ def matrices_to_string(*seq):
     """Stringify a sequence of 2D matrices."""
     formatted = [_format_matrix(M) for M in seq]
     num_rows = max(M.shape[0] for M in formatted)
-    desired_padding = num_rows - M.shape[0]
-    padded = [_pad_horizontally(M, top_padding=0, bottom_padding=desired_padding) for M in formatted]
+    padded = [_pad_horizontally(M, top_padding=0, bottom_padding=num_rows - M.shape[0]) for M in formatted]
     widths = [M.shape[1] for M in padded]
     return _render(_space_columns(np.concatenate(padded, axis=1), widths)) 
 
