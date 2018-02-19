@@ -3,6 +3,12 @@ import itertools
 import numpy as np
 
 
+DOT = "."
+PLUS = '+'
+MINUS = '-'
+HADAMARD = '∘'
+EQUALS = '='
+
 _PAD = ' ' 
 _TOP_LEFT_CORNER = '┌'
 _TOP_RIGHT_CORNER = '┐'
@@ -27,8 +33,60 @@ def matrices_to_string(*seq, names=None, include_dimensions=False):
     if names and len(names) > len(seq):
         raise ValueError(("Number of names must be less than or "
                           "equal to number of matrices"))
+    
+    # A bit of a hack: if any names are specified at all, we must pad any
+    # matrix with an empty name if it doesn't have one specified. Otherwise, it
+    # will be missing a row.
+    name_fallback = ' ' if names else None
 
-    formatted = [_format_matrix(M, name=name, include_dimensions=include_dimensions)
+    formatted = [_format_matrix(M, name=name or name_fallback, include_dimensions=include_dimensions)
+                 for M, name in itertools.zip_longest(seq, names or [])]
+
+    num_rows = max(M.shape[0] for M in formatted)
+    padded = [_pad_horizontally(M, top_padding=0, bottom_padding=num_rows - M.shape[0]) for M in formatted]
+    widths = [M.shape[1] for M in padded]
+    x = _space_columns(np.concatenate(padded, axis=1), widths)
+    return _render(x)
+
+
+def expression_to_string(*seq, names=None, include_dimensions=False):
+    """Stringify an expression, comprising matrices and operators.
+
+    Operators can be any string, but for convenience the following are defined:
+
+    prettymatrix.DOT
+    prettymatrix.HADAMARD
+    prettymatrix.PLUS
+    prettymatrix.MINUS
+    prettymatrix.EQUALS
+    """
+    # Expand the names array with Nones such that its the same length as the
+    # input sequence.
+    if names:
+        for i, M in enumerate(seq):
+            if isinstance(M, str):
+                names.insert(i, None)
+
+    if names and len(names) > len(seq):
+        raise ValueError(("Number of names must be less than or "
+                          "equal to number of matrices"))
+
+    # Dynamically format an item in the input sequence depending on whether its
+    # a matrix or an operator (a string).
+    def _format(M, name=None, include_dimensions=False):
+        if isinstance(M, str):
+            height = int(bool(name)) + int(bool(include_dimensions))
+            return np.concatenate((np.full((height, 1), _PAD), np.full((1, 1),
+                M)), axis=0)
+        else:
+            return _format_matrix(M, name=name, include_dimensions=include_dimensions)
+
+    # A bit of a hack: if any names are specified at all, we must pad any
+    # matrix with an empty name if it doesn't have one specified. Otherwise, it
+    # will be missing a row.
+    name_fallback = ' ' if names else None
+
+    formatted = [_format(M, name=name or name_fallback, include_dimensions=include_dimensions)
                  for M, name in itertools.zip_longest(seq, names or [])]
     num_rows = max(M.shape[0] for M in formatted)
     padded = [_pad_horizontally(M, top_padding=0, bottom_padding=num_rows - M.shape[0]) for M in formatted]

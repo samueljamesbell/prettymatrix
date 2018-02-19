@@ -108,3 +108,34 @@ print(prettymatrix.matrices_to_string(M, M))
 #  └          ┘ └          ┘
 #
 ```
+
+### Stringify an expression containing matrices and operators
+```
+import numpy as np
+import prettymatrix
+
+M = np.array([['1', '1'], ['1', '1']])
+
+print(prettymatrix.expression_to_string(M,
+                                        prettymatrix.HADAMARD,
+                                        M,
+                                        prettymatrix.EQUALS,
+                                        M,
+                                        names=['M', 'M', 'M'),
+                                        include_dimensions=True)
+
+# =>
+#  M         M         M
+#  (2x2)     (2x2)     (2x2)
+#  ┌     ┐ ∘ ┌     ┐ = ┌     ┐
+#  │ 1 1 │   │ 1 1 │   │ 1 1 │
+#  │ 1 1 │   │ 1 1 │   │ 1 1 │
+#  └     ┘   └     ┘   └     ┘
+#
+```
+
+TODO
+----
+- [ ] Support rendering transpose and inverse operations
+- [ ] Allow wrapping of matrices and vectors in functions, e.g. `tanh`
+- [ ] Highlight matching dimensions in the same colour
