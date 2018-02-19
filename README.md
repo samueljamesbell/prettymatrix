@@ -65,11 +65,11 @@ M = np.array([['0'], ['0']])
 print(prettymatrix.matrix_to_string(M, name='M_x_y'))
 
 # =>
+#  M_x_y
 #  ┌   ┐
 #  │ 0 │
 #  │ 0 │
 #  └   ┘
-#  M_x_y
 #
 ```
 
@@ -84,11 +84,11 @@ M = np.array([['0'], ['0']])
 print(prettymatrix.matrix_to_string(M, include_dimensions=True))
 
 # =>
+#  (2x1)
 #  ┌   ┐
 #  │ 0 │
 #  │ 0 │
 #  └   ┘
-#  (2x1)
 #
 ```
 

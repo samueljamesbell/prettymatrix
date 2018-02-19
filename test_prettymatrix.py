@@ -143,38 +143,38 @@ class MatrixToStringTest(unittest.TestCase):
 
     def test_empty_matrix_with_short_name(self):
         expected = (
+            "W   \n"
             "┌  ┐\n"
-            "└  ┘\n"
-            "W   "
+            "└  ┘"
         )
         actual = prettymatrix.matrix_to_string(np.full((0, 0), ''), name='W')
         self.assertEqual(expected, actual)
 
     def test_empty_matrix_with_long_name(self):
         expected = (
+            "W_x_y\n"
             "┌  ┐ \n"
-            "└  ┘ \n"
-            "W_x_y"
+            "└  ┘ "
         )
         actual = prettymatrix.matrix_to_string(np.full((0, 0), ''), name='W_x_y')
         self.assertEqual(expected, actual)
 
     def test_1_x_1_matrix_with_short_name(self):
         expected = (
+            "W    \n"
             "┌   ┐\n"
             "│ 0 │\n"
-            "└   ┘\n"
-            "W    "
+            "└   ┘"
         )
         actual = prettymatrix.matrix_to_string(np.full((1, 1), '0'), name='W')
         self.assertEqual(expected, actual)
 
     def test_1_x_1_matrix_with_long_name(self):
         expected = (
+            "W_x_y_z\n"
             "┌   ┐  \n"
             "│ 0 │  \n"
-            "└   ┘  \n"
-            "W_x_y_z"
+            "└   ┘  "
         )
         actual = prettymatrix.matrix_to_string(np.full((1, 1), '0'),
                                                name='W_x_y_z')
@@ -182,20 +182,20 @@ class MatrixToStringTest(unittest.TestCase):
 
     def test_1_x_2_matrix_with_short_name(self):
         expected = (
+            "W      \n"
             "┌     ┐\n"
             "│ 0 0 │\n"
-            "└     ┘\n"
-            "W      "
+            "└     ┘"
         )
         actual = prettymatrix.matrix_to_string(np.full((1, 2), '0'), name='W')
         self.assertEqual(expected, actual)
 
     def test_1_x_2_matrix_with_long_name(self):
         expected = (
+            "W_x_y_z\n"
             "┌     ┐\n"
             "│ 0 0 │\n"
-            "└     ┘\n"
-            "W_x_y_z"
+            "└     ┘"
         )
         actual = prettymatrix.matrix_to_string(np.full((1, 2), '0'),
                                                name='W_x_y_z')
@@ -203,11 +203,11 @@ class MatrixToStringTest(unittest.TestCase):
 
     def test_2_x_2_matrix_with_short_name(self):
         expected = (
+            "W         \n"
             "┌        ┐\n"
             "│ 00 000 │\n"
             "│ 0  00  │\n"
-            "└        ┘\n"
-            "W         "
+            "└        ┘"
         )
         actual = prettymatrix.matrix_to_string(np.array([['00', '000'], ['0', '00']]),
                                                name='W')
@@ -215,11 +215,11 @@ class MatrixToStringTest(unittest.TestCase):
 
     def test_2_x_2_matrix_with_long_name(self):
         expected = (
+            "W_long_name\n"
             "┌        ┐ \n"
             "│ 00 000 │ \n"
             "│ 0  00  │ \n"
-            "└        ┘ \n"
-            "W_long_name"
+            "└        ┘ "
         )
         actual = prettymatrix.matrix_to_string(np.array([['00', '000'], ['0', '00']]),
                                                name='W_long_name')
@@ -227,9 +227,9 @@ class MatrixToStringTest(unittest.TestCase):
 
     def test_empty_matrix_with_dimensions(self):
         expected = (
+            "(0x0)\n"
             "┌  ┐ \n"
-            "└  ┘ \n"
-            "(0x0)"
+            "└  ┘ "
         )
         actual = prettymatrix.matrix_to_string(np.full((0, 0), ''),
                                                include_dimensions=True)
@@ -237,10 +237,10 @@ class MatrixToStringTest(unittest.TestCase):
 
     def test_1_x_1_matrix_with_dimensions(self):
         expected = (
+            "(1x1)\n"
             "┌   ┐\n"
             "│ 0 │\n"
-            "└   ┘\n"
-            "(1x1)"
+            "└   ┘"
         )
         actual = prettymatrix.matrix_to_string(np.full((1, 1), '0'),
                                                include_dimensions=True)
@@ -248,10 +248,10 @@ class MatrixToStringTest(unittest.TestCase):
 
     def test_1_x_2_matrix_with_dimensions(self):
         expected = (
+            "(1x2)  \n"
             "┌     ┐\n"
             "│ 0 0 │\n"
-            "└     ┘\n"
-            "(1x2)  "
+            "└     ┘"
         )
         actual = prettymatrix.matrix_to_string(np.full((1, 2), '0'),
                                                include_dimensions=True)
@@ -259,11 +259,11 @@ class MatrixToStringTest(unittest.TestCase):
 
     def test_2_x_1_matrix_with_dimensions(self):
         expected = (
+            "(2x1)\n"
             "┌   ┐\n"
             "│ 0 │\n"
             "│ 0 │\n"
-            "└   ┘\n"
-            "(2x1)"
+            "└   ┘"
         )
         actual = prettymatrix.matrix_to_string(np.full((2, 1), '0'),
                                                include_dimensions=True)
@@ -271,10 +271,10 @@ class MatrixToStringTest(unittest.TestCase):
 
     def test_empty_matrix_with_name_and_dimensions(self):
         expected = (
-            "┌  ┐ \n"
-            "└  ┘ \n"
             "M    \n"
-            "(0x0)"
+            "(0x0)\n"
+            "┌  ┐ \n"
+            "└  ┘ "
         )
         actual = prettymatrix.matrix_to_string(np.full((0, 0), ''),
                                                name='M',
@@ -434,6 +434,68 @@ class MatricesToStringTest(unittest.TestCase):
         )
         actual = prettymatrix.matrices_to_string(np.full((2, 1), '0'), np.full((1, 1), '0'))
         self.assertEqual(expected, actual)
+
+    def test_two_empty_matrices_with_names(self):
+        expected = (
+            "M    N   \n"
+            "┌  ┐ ┌  ┐\n"
+            "└  ┘ └  ┘"
+        )
+        actual = prettymatrix.matrices_to_string(np.full((0, 0), ''),
+                                                 np.full((0, 0), ''),
+                                                 names=['M', 'N'])
+        self.assertEqual(expected, actual)
+
+    def test_two_empty_matrices_with_long_names(self):
+        expected = (
+            "M_x_y N   \n"
+            "┌  ┐  ┌  ┐\n"
+            "└  ┘  └  ┘"
+        )
+        actual = prettymatrix.matrices_to_string(np.full((0, 0), ''),
+                                                 np.full((0, 0), ''),
+                                                 names=['M_x_y', 'N'])
+        self.assertEqual(expected, actual)
+
+    def test_two_empty_matrices_with_dimensions(self):
+        expected = (
+            "(0x0) (0x0)\n"
+            "┌  ┐  ┌  ┐ \n"
+            "└  ┘  └  ┘ "
+        )
+        actual = prettymatrix.matrices_to_string(np.full((0, 0), ''),
+                                                 np.full((0, 0), ''),
+                                                 include_dimensions=True)
+        self.assertEqual(expected, actual)
+
+    def test_two_empty_matrices_with_dimensions_and_names(self):
+        expected = (
+            "M     N    \n"
+            "(0x0) (0x0)\n"
+            "┌  ┐  ┌  ┐ \n"
+            "└  ┘  └  ┘ "
+        )
+        actual = prettymatrix.matrices_to_string(np.full((0, 0), ''),
+                                                 np.full((0, 0), ''),
+                                                 names=['M', 'N'],
+                                                 include_dimensions=True)
+        self.assertEqual(expected, actual)
+
+    def test_two_empty_matrices_with_dimensions_and_long_names(self):
+        expected = (
+            "M_x_y_z N    \n"
+            "(0x0)   (0x0)\n"
+            "┌  ┐    ┌  ┐ \n"
+            "└  ┘    └  ┘ "
+        )
+        actual = prettymatrix.matrices_to_string(np.full((0, 0), ''),
+                                                 np.full((0, 0), ''),
+                                                 names=['M_x_y_z', 'N'],
+                                                 include_dimensions=True)
+        self.assertEqual(expected, actual)
+
+
+
 
 
 

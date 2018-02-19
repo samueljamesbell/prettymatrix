@@ -21,9 +21,15 @@ def matrix_to_string(M, name=None, include_dimensions=False):
     return _render(_format_matrix(M, name, include_dimensions))
 
 
-def matrices_to_string(*seq):
+def matrices_to_string(*seq, names=None, include_dimensions=False):
     """Stringify a sequence of 2D matrices."""
-    formatted = [_format_matrix(M) for M in seq]
+
+    if names and len(names) > len(seq):
+        raise ValueError(("Number of names must be less than or "
+                          "equal to number of matrices"))
+
+    formatted = [_format_matrix(M, name=name, include_dimensions=include_dimensions)
+                 for M, name in itertools.zip_longest(seq, names or [])]
     num_rows = max(M.shape[0] for M in formatted)
     padded = [_pad_horizontally(M, top_padding=0, bottom_padding=num_rows - M.shape[0]) for M in formatted]
     widths = [M.shape[1] for M in padded]
@@ -39,19 +45,21 @@ def _format_matrix(M, name=None, include_dimensions=False):
     * Wrap the entire matrix in padding
     * Add typical matrix-notation bracketing
     * Replace internal rows and columns with ellipses if matrix is too large
-    * Optionally append a name row to the matrix
-    * Optionally append a row containing the matrix's dimensions
+    * Optionally prepend a row containing the matrix's dimensions
+    * Optionally prepend a name row to the matrix
     """
-    N = _append_string_row(
-            _border(
+    N = _border(
             _pad(
             _space_columns(
             *_normalize_all_cells(
             _cells_to_string(
-            _cap_dimensions(M)))))), name)
+            _cap_dimensions(M))))))
 
     if include_dimensions:
-        N = _append_string_row(N, '({}x{})'.format(*M.shape))
+        N = _prepend_string_row(N, '({}x{})'.format(*M.shape))
+
+    if name:
+        N = _prepend_string_row(N, name)
 
     return N
 
@@ -219,8 +227,8 @@ def _cells_to_string(M):
     return M.astype(str)
 
 
-def _append_string_row(M, string):
-    """Append a new row containing string to the bottom of the matrix."""
+def _prepend_string_row(M, string):
+    """Prepend a new row containing string to the top of the matrix."""
     if not string:
         return M
 
@@ -228,7 +236,7 @@ def _append_string_row(M, string):
     string_row = _normalize_cell_width(np.array([[string]]), num_cols)
     right_padding = string_row.shape[1] - num_cols
     padded = _pad_vertically(M, 0, right_padding)
-    return np.concatenate((padded, string_row), axis=0)
+    return np.concatenate((string_row, padded), axis=0)
 
 
 def _cap_dimensions(M):
