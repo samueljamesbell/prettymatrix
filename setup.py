@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='prettymatrix',
-    version='0.1.6',
+    version='0.1.7',
     py_modules=['prettymatrix'],
     license='MIT',
     author='Samuel Bell',
